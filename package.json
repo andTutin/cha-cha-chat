@@ -1,0 +1,20 @@
+{
+  "name": "cha-cha-chat",
+  "version": "1.0.0",
+  "description": "Выпускной проект №2 курса \"Комплексное обучение JavaScript\" школы онлайн-образования Loftschool",
+  "main": "chat.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "websocket",
+    "js",
+    "javascript",
+    "nodejs",
+    "express",
+    "socket.io",
+    "loftschool"
+  ],
+  "author": "Andrey Tutin <and.tutin@gmail.com>",
+  "license": "ISC"
+}
