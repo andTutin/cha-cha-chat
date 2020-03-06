@@ -6,8 +6,7 @@ const conf = {
     entry: './src/js/chat.js',
     output: {
         path: path.resolve(__dirname, 'dist'),
-        filename : 'chat.js',
-        publicPath: 'dist/'
+        filename : 'chat.js'
     },
     devServer: {
         contentBase: path.join(__dirname, 'dist'),
