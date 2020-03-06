@@ -6,7 +6,7 @@ let server = app.listen(PORT, function() {
     console.log(`listening on port ${PORT}`)
 });
 
-app.use(express.static('dist'));
+app.use(express.static('dist/'));
 
 var io = socket(server);
 
