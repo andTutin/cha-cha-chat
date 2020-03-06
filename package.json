@@ -4,7 +4,7 @@
   "description": "Выпускной проект №2 курса \"Комплексное обучение JavaScript\" школы онлайн-образования Loftschool",
   "main": "chat.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "server": "node server/server.js"
   },
   "keywords": [
     "websocket",
@@ -16,5 +16,12 @@
     "loftschool"
   ],
   "author": "Andrey Tutin <and.tutin@gmail.com>",
-  "license": "ISC"
+  "license": "ISC",
+  "dependencies": {
+    "express": "^4.17.1",
+    "socket.io": "^2.3.0"
+  },
+  "devDependencies": {
+    "nodemon": "^2.0.2"
+  }
 }
