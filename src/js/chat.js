@@ -1,3 +1,4 @@
+import '../../node_modules/normalize.css'
 import '../css/chat.css';
 
 const io = require('socket.io-client');

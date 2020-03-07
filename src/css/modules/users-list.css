@@ -1,0 +1,31 @@
+.users__list {
+    list-style: none;
+    padding: 0;
+}
+
+.users__item {
+    padding: 20px;
+}
+
+.users__item:not(:last-child) {
+    margin-bottom: 20px;
+}
+
+.user-card {
+    display: flex;
+}
+
+.user-card__avatar {
+    width: 75px;
+    height: 75px;
+    border-radius: 50%;
+    overflow: hidden;
+    margin-right: 20px;
+}
+
+.user-card__info {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    font-size: 18px;
+}

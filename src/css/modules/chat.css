@@ -1,0 +1,17 @@
+.chat {
+    display: flex;
+    width: 100%;
+    height: 100%;
+    background: #17212b;
+}
+
+.chat__left {
+    width: 400px;
+}
+
+.chat__right {
+    flex: 1;
+    border: 1px solid #101921;
+    display: flex;
+    flex-direction: column;
+}

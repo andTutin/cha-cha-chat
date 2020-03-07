@@ -1,9 +1,42 @@
 <!DOCTYPE html>
-html(lang="en")
+html(lang="ru")
     head
         meta(charset="UTF-8")
         meta(name="viewport", content="width=device-width, initial-scale=1.0")
         title Ча-Ча-Чат
     body
         .wrapper
-            h1 Hello world!!!
+            main.chat
+                aside.chat__left
+                    .menu-and-search
+                        .hamburger
+                            .hamburger__line
+                            .hamburger__line
+                            .hamburger__line
+                        .search
+                            input(type="text" placeholder="Найти...").search__input
+                    .users
+                        ul.users__list
+                            li.users__item
+                                .user-card
+                                    .user-card__avatar
+                                        .white
+                                    .user-card__info
+                                        .user-card__username Игорь Яицкий
+                            li.users__item
+                                .user-card
+                                    .user-card__avatar
+                                        .white
+                                    .user-card__info
+                                        .user-card__username Игорь Яицкий
+                .chat__right
+                    .users-counter
+                        .users-counter__title Чат
+                        .users-counter__value
+                            p 2 участника
+                    .messages-window
+                    form.message-form
+                        input(type="text" name="message" placeholder="Введите сообщение...").message-form__input
+                        button(type="submit").send-button Отправить
+            .overlay
+                include ./blocks/auth

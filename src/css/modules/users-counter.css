@@ -1,0 +1,18 @@
+.users-counter {
+    background: #17212b;
+    border-left: 1px solid #101921;
+}
+
+.users-counter {
+    padding: 20px;
+    color: #fff;
+    font-size: 14px;
+}
+
+.users-counter__value {
+    color: #7f91a4;
+}
+
+.users-counter__title {
+    margin-bottom: 10px;
+}
