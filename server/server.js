@@ -22,5 +22,6 @@ io.on('connection', function(socket) {
         clients.push(data)
         io.sockets.emit('clients-online', clients)
         io.sockets.emit('messages-history', messagesHistory)
+        io.sockets.emit('clients-counter', clients.length);
     })
 })

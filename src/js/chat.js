@@ -90,6 +90,15 @@ socket.on('messages-history', (data) => {
     messagesWindow.scrollTop = 1000000000
 })
 
+socket.on('clients-counter', data => {
+    console.log(data)
+    if (data == 1) {
+        document.querySelector('.users-counter__value p').innerText = '1 участник'
+    } else {
+        document.querySelector('.users-counter__value p').innerText = data + 'участникa(-ов)'
+    }       
+})
+
 sendButton.addEventListener('click', (e) => {
     e.preventDefault();
     socket.emit('chat-message', {
@@ -99,3 +108,4 @@ sendButton.addEventListener('click', (e) => {
 
     messageForm.message.value = ''
 })
+
