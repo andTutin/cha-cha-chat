@@ -67,3 +67,5 @@ html, body {
     color: #fff;
     transform: rotate(45deg);
 }
+
+@import url(./modules/message.css)

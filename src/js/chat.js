@@ -34,7 +34,21 @@ document.addEventListener('DOMContentLoaded', () => {
 })
 
 socket.on('chat-message', (data) => {
-    messagesWindow.innerHTML += '<div>' +  data.message +  data.time + '</div>';
+    messagesWindow.innerHTML += 
+        `<div class="message">
+            <div class="message__photo">
+                <div class="white"></div>
+            </div>
+            <div class="message__body">
+                <div class="message__text"> ${data.message}</div>
+                <div class="message__time"> ${data.time}</div>
+                <div class="message__arrow">
+                    <div></div>
+                </div>
+            </div>
+        </div>`;
+
+    messagesWindow.scrollTop = 1000000000
 })
 
 socket.on('clients-online', (data) => {
@@ -59,8 +73,21 @@ socket.on('messages-history', (data) => {
     console.log(data)
     data.forEach(message => {
         messagesWindow.innerHTML += 
-           `<div> ${message.message} ${message.time}</div>`;
+            `<div class="message">
+                <div class="message__photo">
+                    <div class="white"></div>
+                </div>
+                <div class="message__body">
+                    <div class="message__text"> ${message.message}</div>
+                    <div class="message__time"> ${message.time}</div>
+                    <div class="message__arrow">
+                        <div></div>
+                    </div>
+                </div>
+            </div>`;
     })
+
+    messagesWindow.scrollTop = 1000000000
 })
 
 sendButton.addEventListener('click', (e) => {
