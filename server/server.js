@@ -5,15 +5,22 @@ const PORT = 3000;
 let server = app.listen(PORT, function() {
     console.log(`listening on port ${PORT}`)
 });
+let io = socket(server);
+let clients = [];
+let messagesHistory = [];
 
 app.use(express.static('dist'));
 
-var io = socket(server);
-
-io.on('connection', function(socket){
-    console.log('made connection')
+io.on('connection', function(socket) {
 
     socket.on('chat-message', (data) => {
+        messagesHistory.push(data);
         io.sockets.emit('chat-message', data)
+    })
+
+    socket.on('login', (data) => {
+        clients.push(data)
+        io.sockets.emit('clients-online', clients)
+        io.sockets.emit('messages-history', messagesHistory)
     })
 })

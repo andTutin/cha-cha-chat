@@ -17,18 +17,6 @@ html(lang="ru")
                             input(type="text" placeholder="Найти...").search__input
                     .users
                         ul.users__list
-                            li.users__item
-                                .user-card
-                                    .user-card__avatar
-                                        .white
-                                    .user-card__info
-                                        .user-card__username Игорь Яицкий
-                            li.users__item
-                                .user-card
-                                    .user-card__avatar
-                                        .white
-                                    .user-card__info
-                                        .user-card__username Игорь Яицкий
                 .chat__right
                     .users-counter
                         .users-counter__title Чат
@@ -39,4 +27,4 @@ html(lang="ru")
                         input(type="text" name="message" placeholder="Введите сообщение...").message-form__input
                         button(type="submit").send-button Отправить
             .overlay
-                //-include ./blocks/auth
+                include ./blocks/auth
