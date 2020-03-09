@@ -18,9 +18,9 @@ const messageForm = document.querySelector('.message-form'),
       hamburger = document.querySelector('.hamburger');
 
 document.addEventListener('DOMContentLoaded', () => {
-    let isUserLogged = cookie.get('logged')
+    //let isUserLogged = cookie.get('logged')
 
-    if (!isUserLogged) {
+    //if (!isUserLogged) {
         overlay.classList.add('open');
         overlay.innerHTML = render.auth();
         const authForm =document.querySelector('.auth__form');
@@ -28,18 +28,22 @@ document.addEventListener('DOMContentLoaded', () => {
         if (authForm) {
             authForm.addEventListener('submit', e => {
                 e.preventDefault();
-                cookie.set('logged', true, sessionTime);
+
+                //cookie.set('logged', true, sessionTime);
                 storage.set(authForm.fio.value, authForm.nickname.value);
+                
                 socket.emit('login', {
+                    id: socket.id,
                     fio:  authForm.fio.value,
                     nickname: authForm.nickname.value,
                     photo: storage.get().avatar || DEFAULTPHOTO
                 })
+                
                 overlay.innerHTML = '';
                 overlay.classList.remove('open');
             })
         }
-    }
+    //}
 })
 
 hamburger.addEventListener('click', () => {
@@ -52,6 +56,7 @@ hamburger.addEventListener('click', () => {
     fileReader.addEventListener('load', () => {
         document.querySelector('.confirmation').style.display = 'flex';
         document.querySelector('#new-avatar__preview').src = fileReader.result;
+        document.querySelector('#input-img').src = fileReader.result;
     })
 
     photoInput.addEventListener('change', e => {
@@ -65,14 +70,23 @@ hamburger.addEventListener('click', () => {
     document.querySelector('#submit-btn').addEventListener('click', () => {
         let name = storage.get().fio;
         let nick = storage.get().nickname;
-
+        let imgClass = `.${socket.id}`;
+        console.log('selector', typeof imgClass, imgClass)
+        document.querySelectorAll(imgClass).forEach(pic => pic.src = fileReader.result)
         storage.set(name, nick, fileReader.result);
-        overlay.classList.remove('open');
 
-        document.querySelectorAll(`.${name.split(' ').join('')}`).forEach(pic => pic.src = storage.get().avatar)
+        socket.emit('change-avatar', {
+            id: socket.id,
+            avatar: fileReader.result
+        })
+
+        overlay.classList.remove('open'); 
     })
+})
 
-
+socket.on('change-avatar', data => {
+    let imgClass = `.${data.id}`;
+    document.querySelectorAll(imgClass).forEach(pic => pic.src = data.avatar)
 })
 
 socket.on('chat-message', data => {
@@ -82,10 +96,10 @@ socket.on('chat-message', data => {
 
 socket.on('clients-online', data => {
     clientsOnline.innerHTML = '';
-    data.forEach(client => clientsOnline.innerHTML += render.client(client));
+    for (let client of data) clientsOnline.innerHTML += render.client(client);
 })
 
-socket.once('messages-history', (data) => {
+socket.once('messages-history', data => {
     data.forEach(message => {
         messagesWindow.innerHTML += render.message(message)
     })
@@ -105,11 +119,23 @@ sendButton.addEventListener('click', (e) => {
     e.preventDefault();
 
     socket.emit('chat-message', {
+        id: socket.id,
         fio: storage.get().fio,
         photo: storage.get().avatar,
         message: messageForm.message.value,
         time: new Date().toLocaleTimeString()
     })
+
+    messagesWindow.innerHTML += render.message({
+        id: socket.id,
+        fio: storage.get().fio,
+        photo: storage.get().avatar,
+        message: messageForm.message.value,
+        time: new Date().toLocaleTimeString()
+    })
+
+    document.querySelector('.message:last-of-type').style.marginLeft = 'auto';
+    document.querySelector('.message:last-of-type').style.flexDirection = 'row-reverse';
 
     messageForm.message.value = ''
 })
