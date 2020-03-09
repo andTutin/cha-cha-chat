@@ -16,12 +16,17 @@ io.on('connection', function(socket) {
     socket.on('chat-message', (data) => {
         messagesHistory.push(data);
         io.sockets.emit('chat-message', data)
+        console.log(data);
+        console.log(messagesHistory)
     })
 
     socket.on('login', (data) => {
         clients.push(data)
+        console.log('data', data)
         io.sockets.emit('clients-online', clients)
+        console.log('clients', clients)
         io.sockets.emit('messages-history', messagesHistory)
+        console.log('history', messagesHistory)
         io.sockets.emit('clients-counter', clients.length);
     })
 })

@@ -1,7 +1,10 @@
 import '../../node_modules/normalize.css'
 import '../css/chat.css';
-import findCookie from './modules/check-cookie';
-import setCookie from './modules/set-cookie';
+
+import storage from './modules/storage';
+import cookie from './modules/cookie';
+import render from './modules/render';
+
 const io = require('socket.io-client');
 const sessionTime = 600;
 let socket = io.connect('http://localhost:3000');
@@ -14,16 +17,17 @@ const messageForm = document.querySelector('.message-form'),
       clientsOnline = document.querySelector('.users__list');
 
 document.addEventListener('DOMContentLoaded', () => {
-    let isUserLogged = findCookie(document.cookie, 'logged')
+    let isUserLogged = cookie.get('logged')
 
     if (!isUserLogged) {
         overlay.classList.add('open');
         
         authForm.addEventListener('submit', e => {
             e.preventDefault();
-            setCookie('logged', authForm.fio.value, sessionTime);
+            cookie.set('logged', true, sessionTime);
+            storage.set(authForm.fio.value, authForm.nickname.value);
             overlay.classList.remove('open');
-
+            
             socket.emit('login', {
                 fio:  authForm.fio.value,
                 nickname: authForm.nickname.value,
@@ -33,65 +37,25 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 })
 
-socket.on('chat-message', (data) => {
-    messagesWindow.innerHTML += 
-        `<div class="message">
-            <div class="message__photo">
-                <div class="white"></div>
-            </div>
-            <div class="message__body">
-                <div class="message__text"> ${data.message}</div>
-                <div class="message__time"> ${data.time}</div>
-                <div class="message__arrow">
-                    <div></div>
-                </div>
-            </div>
-        </div>`;
-
+socket.on('chat-message', data => {
+    messagesWindow.innerHTML += render.message(data)
     messagesWindow.scrollTop = 1000000000
 })
 
-socket.on('clients-online', (data) => {
+socket.on('clients-online', data => {
     clientsOnline.innerHTML = '';
-    data.forEach(client => {
-        clientsOnline.innerHTML += 
-           `<li class="users__item">
-                <div class="user-card">
-                    <div class="user-card__avatar">
-                        <img src="${client.photo}">
-                    </div>
-                    <div class="user-card__info">
-                        <div class="user-card__username">${client.fio}</div>
-                        <div class="user-card__nickname">${client.nickname}</div>
-                </div>
-                </div>
-            </li>`;
-    })
+    data.forEach(client => clientsOnline.innerHTML += render.client(client));
 })
 
 socket.on('messages-history', (data) => {
-    console.log(data)
     data.forEach(message => {
-        messagesWindow.innerHTML += 
-            `<div class="message">
-                <div class="message__photo">
-                    <div class="white"></div>
-                </div>
-                <div class="message__body">
-                    <div class="message__text"> ${message.message}</div>
-                    <div class="message__time"> ${message.time}</div>
-                    <div class="message__arrow">
-                        <div></div>
-                    </div>
-                </div>
-            </div>`;
+        messagesWindow.innerHTML += render.message(message)
     })
 
     messagesWindow.scrollTop = 1000000000
 })
 
 socket.on('clients-counter', data => {
-    console.log(data)
     if (data == 1) {
         document.querySelector('.users-counter__value p').innerText = '1 участник'
     } else {
@@ -101,6 +65,7 @@ socket.on('clients-counter', data => {
 
 sendButton.addEventListener('click', (e) => {
     e.preventDefault();
+
     socket.emit('chat-message', {
         message: messageForm.message.value,
         time: new Date().toLocaleTimeString()
