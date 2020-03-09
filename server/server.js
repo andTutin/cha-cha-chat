@@ -12,21 +12,21 @@ let messagesHistory = [];
 app.use(express.static('dist'));
 
 io.on('connection', function(socket) {
+    console.log('connected')
+
+    socket.on('login', (data) => {
+        clients.push(data)
+        io.sockets.emit('clients-online', clients)
+        io.sockets.emit('messages-history', messagesHistory)
+        io.sockets.emit('clients-counter', clients.length);        
+    })
+
+    socket.on('disconnect', () => console.log('disconnect'))
 
     socket.on('chat-message', (data) => {
         messagesHistory.push(data);
         io.sockets.emit('chat-message', data)
-        console.log(data);
-        console.log(messagesHistory)
-    })
-
-    socket.on('login', (data) => {
-        clients.push(data)
-        console.log('data', data)
-        io.sockets.emit('clients-online', clients)
-        console.log('clients', clients)
-        io.sockets.emit('messages-history', messagesHistory)
-        console.log('history', messagesHistory)
-        io.sockets.emit('clients-counter', clients.length);
     })
 })
+
+//io.on('disconnect', () => console.log('disconnect'));
