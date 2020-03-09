@@ -8,6 +8,6 @@ export default {
 
         localStorage.setItem('user', JSON.stringify(user))
     },
-    get: () => localStorage.getItem('user')
+    get: () => JSON.parse(localStorage.getItem('user'))
     
 }

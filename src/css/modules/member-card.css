@@ -1,0 +1,95 @@
+.member-card {
+    width: 400px;
+    padding: 20px 50px;
+    align-self: flex-start;
+    border-radius: 10px;
+    background: #17212b;
+    margin-top: 50px;
+    margin-bottom: 50px;
+    cursor: initial;
+}
+
+.member-card__title {
+    margin-bottom: 20px;
+}
+
+.member-card__body {
+    display: flex;
+    align-items: center;
+}
+
+.member-card__avatar {
+    width: 75px;
+    height: 75px;
+    border-radius: 50%;
+    overflow: hidden;
+    margin-right: 20px;
+    cursor: pointer;
+    display: flex;
+}
+
+.new-avatar {
+    text-align: center;
+    width: 200px;
+    height: 200px;
+    border-radius: 50%;
+    overflow: hidden;
+    margin-bottom: 30px;
+}
+
+.new-avatar img {
+    width: 100%;
+    height: 100%; 
+}
+
+.member-card__avatar img {
+    width: 100%;
+    height: 100%;
+}
+
+.member-card__member {
+    font-size: 18px;
+    font-weight: 500;
+    margin-bottom: 10px;
+}
+
+.member-card__status {
+    font-size: 14px;
+    color: #51b3f3;
+    font-family: "Ubuntu";
+    font-weight: 300;
+}
+
+.confirmation {
+    width: 400px;
+    padding: 50px;
+    align-self: center;
+    border-radius: 10px;
+    background: #17212b;
+    margin-top: 50px;
+    cursor: initial;
+    display: none;
+    flex-direction: column;
+    align-items: center;
+}
+
+.confirmation__btns {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+}
+#submit-btn, #reset-btn {
+    font-size: 15px;
+    color: #6ab2f2;
+    padding: 10px 20px;
+    border: transparent;
+    border-radius: 4px;
+    background: #1d2a39;
+    cursor: pointer;
+}
+
+#reset-btn {
+    margin-right: 10px;
+    border: hidden;
+    background: transparent;
+}
