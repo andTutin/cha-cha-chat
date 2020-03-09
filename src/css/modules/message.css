@@ -60,3 +60,25 @@
     align-self: flex-end;
     color: #738597;
 }
+
+.my {
+    margin-left: auto;
+    flex-direction: row-reverse;
+}
+
+.my > .message__photo {
+    margin-right: 0;
+    margin-left: 20px;
+}
+
+.my > .message__body > .message__arrow {
+    position: absolute;
+    bottom: -3px;
+    left: unset;
+    right: -17px;
+    width: 20px;
+    height: 25px;
+    background: #172533;
+    overflow: hidden;
+    transform: rotate(90deg);
+}

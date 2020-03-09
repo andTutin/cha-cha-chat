@@ -70,9 +70,9 @@ hamburger.addEventListener('click', () => {
     document.querySelector('#submit-btn').addEventListener('click', () => {
         let name = storage.get().fio;
         let nick = storage.get().nickname;
-        let imgClass = `.${socket.id}`;
-        console.log('selector', typeof imgClass, imgClass)
-        document.querySelectorAll(imgClass).forEach(pic => pic.src = fileReader.result)
+        let attr = `[data-image=${socket.id}]`;
+        //console.log('selector', typeof imgClass, imgClass)
+        document.querySelectorAll(attr).forEach(pic => pic.src = fileReader.result)
         storage.set(name, nick, fileReader.result);
 
         socket.emit('change-avatar', {
@@ -85,8 +85,8 @@ hamburger.addEventListener('click', () => {
 })
 
 socket.on('change-avatar', data => {
-    let imgClass = `.${data.id}`;
-    document.querySelectorAll(imgClass).forEach(pic => pic.src = data.avatar)
+    let attr = `[data-image=${data.id}]`;
+    document.querySelectorAll(attr).forEach(pic => pic.src = data.avatar)
 })
 
 socket.on('chat-message', data => {
@@ -134,9 +134,17 @@ sendButton.addEventListener('click', (e) => {
         time: new Date().toLocaleTimeString()
     })
 
-    document.querySelector('.message:last-of-type').style.marginLeft = 'auto';
-    document.querySelector('.message:last-of-type').style.flexDirection = 'row-reverse';
+    document.querySelector('.message:last-of-type').classList.add('my')
 
     messageForm.message.value = ''
+})
+/*
+window.addEventListener('beforeunload', () => {
+    socket.emit('disconnect', socket.id)
+})
+*/
+socket.on('disconnect', data => {
+    let attr = `[data-user=${data}]`;
+    document.querySelector(attr).remove()
 })
 

@@ -12,7 +12,7 @@ let messagesHistory = [];
 app.use(express.static('dist'));
 
 io.on('connection', function(socket) {
-    console.log('connected')
+    console.log('connected', clients)
 
     socket.on('login', data => {
         clients.push(data)
@@ -22,9 +22,19 @@ io.on('connection', function(socket) {
         io.sockets.emit('messages-history', messagesHistory)
         io.sockets.emit('clients-counter', clients.length);        
     })
-
-    socket.on('disconnect', () => console.log('disconnect'))
-
+    /* 
+    socket.on('disconnect', data => {
+        socket.broadcast.emit('disconnect', data);
+        /*
+        let ind;
+        clients.forEach((client, index) => {
+            if (client.id == data) ind = index;
+        })
+        clients.splice(ind, 1)
+        console.log('disconnected', clients)
+     
+    });
+    */
     socket.on('chat-message', (data) => {
         messagesHistory.push(data);
         socket.broadcast.emit('chat-message', data)
@@ -32,7 +42,8 @@ io.on('connection', function(socket) {
 
     socket.on('change-avatar', data => {
         socket.broadcast.emit('change-avatar', data)
+        clients.forEach(client => {
+            if (client.id == data.id) client.photo = data.avatar
+        })
     })
 })
-
-//io.on('disconnect', () => console.log('disconnect'));
