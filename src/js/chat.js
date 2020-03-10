@@ -41,12 +41,16 @@ queries.hamburger.addEventListener('click', () => {
         const file = e.target.files[0];
 
         if (file) {
-            fileReader.readAsDataURL(file)
+            if (file.size > 30 * 1024) {
+                alert('Размер файла не должен превышать 30КБ')
+            } else {
+                fileReader.readAsDataURL(file);
+            }
         }
     })
 
     document.querySelector('#submit-btn').addEventListener('click', () => {
-        let attr = `[data-image=${socket.id}]`;
+        let attr = `.${socket.id}`;
 
         document.querySelectorAll(attr).forEach(pic => pic.src = fileReader.result);
         client.avatar = fileReader.result;
@@ -101,17 +105,10 @@ socket.on('chat-message', data => {
 })
 
 socket.on('change-avatar', data => {
-    let attr = `[data-image=${data.id}]`;
+    let attr = `.${data.id}`;
     document.querySelectorAll(attr).forEach(pic => pic.src = data.avatar)
 })
 
-
-
-/*
-
-
 socket.on('disconnect', data => {
-    let attr = `[data-user=${data}]`;
-    document.querySelector(attr).remove()
+    document.getElementById(data).remove()
 })
-*/

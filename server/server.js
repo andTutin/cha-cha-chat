@@ -37,18 +37,15 @@ io.on('connection', socket => {
         socket.broadcast.emit('change-avatar', data)
     })
 
-    /* 
-    socket.on('disconnect', data => {
-        socket.broadcast.emit('disconnect', data);
-        /*
+    socket.on('disconnect', () => {
+        io.sockets.emit('disconnect', socket.id);
         let ind;
+
         clients.forEach((client, index) => {
-            if (client.id == data) ind = index;
+            if (client.id == socket.id) ind = index;
         })
+
         clients.splice(ind, 1)
-        console.log('disconnected', clients)
      
     });
-    */
-
 })
