@@ -1,8 +1,8 @@
 export default {
     message:   data => {
-        return `<div class="message" >
+        return `<div class="message">
                     <div class="message__photo">
-                        <img data-image=${data.id} src=${data.photo}>
+                        <img data-image=${data.id} src=${data.avatar} alt=${data.fio}>
                     </div>
                     <div class="message__body">
                         <div class="message__text"> ${data.message}</div>
@@ -17,7 +17,7 @@ export default {
         return `<li class="users__item" data-user=${client.id}>
                     <div class="user-card">
                         <div class="user-card__avatar">
-                            <img data-image="${client.id}" src="${client.photo}">
+                            <img data-image="${client.id}" src="${client.avatar}">
                         </div>
                         <div class="user-card__info">
                             <div class="user-card__username">${client.fio}</div>
@@ -40,7 +40,6 @@ export default {
                         <input class="auth__input" type="text" name="nickname" placeholder="Введите свой ник..." required>
                         <button class="login-button" type="submit">Войти</button>
                     </form>
-                    <div class="close">+</div>
                 </div>`
     },
     user: user => {
