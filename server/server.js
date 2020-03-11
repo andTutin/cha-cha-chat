@@ -12,14 +12,13 @@ let messagesHistory = [];
 app.use(express.static('dist'));
 
 io.on('connection', socket => {
-    console.log('connected', clients)
 
-    socket.on('login', data => {                                /* слушаем событие login и когда пользователь вошел */
-        socket.emit('clients-online', clients)                  /* отправляем ему массив клиентов онлайн */
-        socket.broadcast.emit('login', data)                    /* отправляем сообщение всем сокетам, кроме него, сообщение об этом */
-        socket.emit('messages-history', messagesHistory)        /* отправляем ему историю сообщений */
-        clients.push(data)                                      /* добавляем клиента в массив клиентов он-лайн */
-        io.sockets.emit('clients-counter', clients.length);     /* отправляем всем количество пользователей в сети */           
+    socket.on('login', data => {
+        socket.emit('clients-online', clients);
+        socket.broadcast.emit('login', data);
+        socket.emit('messages-history', messagesHistory);
+        clients.push(data);
+        io.sockets.emit('clients-counter', clients.length);           
     })
 
     socket.on('chat-message', data => {

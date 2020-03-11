@@ -50,9 +50,8 @@ queries.hamburger.addEventListener('click', () => {
     })
 
     document.querySelector('#submit-btn').addEventListener('click', () => {
-        let attr = `.${socket.id}`;
-
-        document.querySelectorAll(attr).forEach(pic => pic.src = fileReader.result);
+        console.log(document.querySelectorAll('.' + socket.id))
+        document.querySelectorAll('.' + socket.id).forEach(pic => pic.src = fileReader.result);
         client.avatar = fileReader.result;
         socket.emit('change-avatar', client);
         overlay.close(); 
@@ -105,8 +104,7 @@ socket.on('chat-message', data => {
 })
 
 socket.on('change-avatar', data => {
-    let attr = `.${data.id}`;
-    document.querySelectorAll(attr).forEach(pic => pic.src = data.avatar)
+    document.querySelectorAll('.' + data.id).forEach(pic => pic.src = data.avatar)
 })
 
 socket.on('disconnect', data => {
