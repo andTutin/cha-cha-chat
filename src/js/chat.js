@@ -68,9 +68,15 @@ queries.sendButton.addEventListener('click', e => {
 
     queries.messagesWindow.innerHTML += render.message(client)
 
-    document.querySelector('.message:last-of-type').classList.add('my')
+    let newMessage = document.querySelector('.message:last-of-type');
 
-    queries.messageForm.message.value = ''
+    newMessage.classList.add('my');
+
+    groupMessages(socket.id);
+
+    queries.messageForm.message.value = '';
+
+    queries.messagesWindow.scrollTop = 1000000000
 })
 
 socket.on('clients-online', data => {
@@ -80,8 +86,13 @@ socket.on('clients-online', data => {
 
 socket.on('messages-history', data => {
     data.forEach(message => {
-        queries.messagesWindow.innerHTML += render.message(message)
+        queries.messagesWindow.innerHTML += render.message(message);
+
+        let newMessage = document.querySelector('.message:last-of-type');
+        
+        groupMessages(newMessage.querySelector('img').className);  
     })
+    
 
     queries.messagesWindow.scrollTop = 1000000000
 })
@@ -98,8 +109,18 @@ socket.on('login', data => {
     queries.clientsOnline.innerHTML += render.client(data);
 })
 
+socket.on('user-joined', data => {
+    queries.messagesWindow.innerHTML += `<div style="width: 100%; text-align: center; margin-bottom: 20px;"> ${data} </div>`;
+    queries.messagesWindow.scrollTop = 1000000000
+})
+
 socket.on('chat-message', data => {
     queries.messagesWindow.innerHTML += render.message(data)
+
+    let newMessage = document.querySelector('.message:last-of-type');
+        
+    groupMessages(newMessage.querySelector('img').className);
+
     queries.messagesWindow.scrollTop = 1000000000
 })
 
@@ -108,5 +129,24 @@ socket.on('change-avatar', data => {
 })
 
 socket.on('disconnect', data => {
-    document.getElementById(data).remove()
+
+    if (document.getElementById(data)) {
+        queries.messagesWindow.innerHTML += `<div style="width: 100%; text-align: center; margin-bottom: 20px;"> ${document.getElementById(data).querySelector('.user-card__username').textContent} покинул чат </div>`;
+        queries.messagesWindow.scrollTop = 1000000000
+        document.getElementById(data).remove()
+    } 
+
+
 })
+
+function groupMessages(nameOfClass) {
+    let newMessage = document.querySelector('.message:last-of-type');
+    let prevMessage = newMessage.previousSibling;
+
+    if (prevMessage) {
+        if (prevMessage.querySelector('img').className == nameOfClass) { 
+            newMessage.querySelector('.message__photo').style.visibility = 'hidden';
+            newMessage.querySelector('.message__arrow').style.visibility = 'hidden';
+        }
+    }    
+}

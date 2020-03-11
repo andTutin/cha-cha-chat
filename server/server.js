@@ -18,7 +18,8 @@ io.on('connection', socket => {
         socket.broadcast.emit('login', data);
         socket.emit('messages-history', messagesHistory);
         clients.push(data);
-        io.sockets.emit('clients-counter', clients.length);           
+        io.sockets.emit('clients-counter', clients.length);
+        io.sockets.emit('user-joined', `${data.fio} присоединился (-лась) к чату`);      
     })
 
     socket.on('chat-message', data => {
