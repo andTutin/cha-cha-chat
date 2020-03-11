@@ -126,7 +126,7 @@ socket.on('user-joined', data => {
 socket.on('chat-message', data => {
     queries.messagesWindow.innerHTML += render.message(data)
         
-    groupMessages(`message ${data.userID}`);
+    groupMessages(`message message${data.userID}`);
 
     queries.messagesWindow.scrollTop = 1000000000
 })
