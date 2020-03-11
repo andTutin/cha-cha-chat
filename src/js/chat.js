@@ -6,7 +6,10 @@ import overlay from './modules/overlay';
 import queries from './modules/queries';
 
 const io = require('socket.io-client');
-let socket = io.connect('http://localhost:3000');
+let socket = io();
+let userID;
+let userClass;
+let socketID;
 let client;
 
 document.addEventListener('DOMContentLoaded', () => {
@@ -15,8 +18,11 @@ document.addEventListener('DOMContentLoaded', () => {
 
     authForm.addEventListener('submit', e => {
         e.preventDefault();
-        client = new User(socket.id, authForm.fio.value, authForm.nickname.value);
-        socket.emit('login', client)
+        socketID = socket.id;
+        userID = 'user' + socket.id;
+        userClass = '.user' + socket.id
+        client = new User(socketID, userID, userClass, authForm.fio.value, authForm.nickname.value);
+        socket.emit('login', client);
         overlay.close();
     })   
 })
@@ -50,15 +56,14 @@ queries.hamburger.addEventListener('click', () => {
     })
 
     document.querySelector('#submit-btn').addEventListener('click', () => {
-        console.log(document.querySelectorAll('.' + socket.id))
-        document.querySelectorAll('.' + socket.id).forEach(pic => pic.src = fileReader.result);
+        document.querySelectorAll(userClass).forEach(pic => pic.src = fileReader.result);
         client.avatar = fileReader.result;
         socket.emit('change-avatar', client);
         overlay.close(); 
     })
 })
 
-queries.sendButton.addEventListener('click', e => {
+queries.messageForm.addEventListener('submit', e => {
     e.preventDefault();
 
     client.message = queries.messageForm.message.value;
@@ -72,7 +77,7 @@ queries.sendButton.addEventListener('click', e => {
 
     newMessage.classList.add('my');
 
-    groupMessages(socket.id);
+    groupMessages(`message message${userID} my`);
 
     queries.messageForm.message.value = '';
 
@@ -81,19 +86,22 @@ queries.sendButton.addEventListener('click', e => {
 
 socket.on('clients-online', data => {
     queries.clientsOnline.innerHTML = render.client(client);
-    for (let client of data) queries.clientsOnline.innerHTML += render.client(client); 
+
+    if (data.length) {
+        for (let client of data) queries.clientsOnline.innerHTML += render.client(client);
+    }
+
+    queries.messagesWindow.scrollTop = 1000000000
+     
 })
 
 socket.on('messages-history', data => {
     data.forEach(message => {
         queries.messagesWindow.innerHTML += render.message(message);
-
-        let newMessage = document.querySelector('.message:last-of-type');
         
-        groupMessages(newMessage.querySelector('img').className);  
+        groupMessages(`message message${message.userID}`);  
     })
     
-
     queries.messagesWindow.scrollTop = 1000000000
 })
 
@@ -111,42 +119,43 @@ socket.on('login', data => {
 
 socket.on('user-joined', data => {
     queries.messagesWindow.innerHTML += `<div style="width: 100%; text-align: center; margin-bottom: 20px;"> ${data} </div>`;
+
     queries.messagesWindow.scrollTop = 1000000000
 })
 
 socket.on('chat-message', data => {
     queries.messagesWindow.innerHTML += render.message(data)
-
-    let newMessage = document.querySelector('.message:last-of-type');
         
-    groupMessages(newMessage.querySelector('img').className);
+    groupMessages(`message ${data.userID}`);
 
     queries.messagesWindow.scrollTop = 1000000000
 })
 
 socket.on('change-avatar', data => {
-    document.querySelectorAll('.' + data.id).forEach(pic => pic.src = data.avatar)
+    document.querySelectorAll(data.userClass).forEach(pic => pic.src = data.avatar)
 })
 
 socket.on('disconnect', data => {
 
-    if (document.getElementById(data)) {
-        queries.messagesWindow.innerHTML += `<div style="width: 100%; text-align: center; margin-bottom: 20px;"> ${document.getElementById(data).querySelector('.user-card__username').textContent} покинул чат </div>`;
+    if (document.getElementById(data.userID)) {
+        queries.messagesWindow.innerHTML += `<div style="width: 100%; text-align: center; margin-bottom: 20px;"> ${data.fio} покинул чат </div>`;
         queries.messagesWindow.scrollTop = 1000000000
-        document.getElementById(data).remove()
-    } 
+        document.getElementById(data.userID).remove()
+    }
 
-
+    queries.messagesWindow.scrollTop = 1000000000
 })
 
 function groupMessages(nameOfClass) {
     let newMessage = document.querySelector('.message:last-of-type');
     let prevMessage = newMessage.previousSibling;
+    let photo = newMessage.querySelector('.message__photo');
+    let arrow = newMessage.querySelector('.message__arrow')
 
     if (prevMessage) {
-        if (prevMessage.querySelector('img').className == nameOfClass) { 
-            newMessage.querySelector('.message__photo').style.visibility = 'hidden';
-            newMessage.querySelector('.message__arrow').style.visibility = 'hidden';
+        if (prevMessage.className == nameOfClass) { 
+            photo.style.visibility = 'hidden';
+            arrow.style.visibility = 'hidden';
         }
     }    
 }

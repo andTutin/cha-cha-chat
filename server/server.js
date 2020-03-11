@@ -29,23 +29,24 @@ io.on('connection', socket => {
 
     socket.on('change-avatar', data => {
         clients.forEach(client => {
-            if (client.id == data.id) client.avatar = data.avatar
+            if (client.socketID == data.socketID) client.avatar = data.avatar
         })
         messagesHistory.forEach(message => {
-            if (message.id == data.id) message.avatar = data.avatar
+            if (message.socketID == data.socketID) message.avatar = data.avatar
         })
         socket.broadcast.emit('change-avatar', data)
     })
 
     socket.on('disconnect', () => {
-        io.sockets.emit('disconnect', socket.id);
         let ind;
 
         clients.forEach((client, index) => {
-            if (client.id == socket.id) ind = index;
+            if (client.socketID == socket.id) {
+                ind = index;
+                io.sockets.emit('disconnect', client)
+            }
         })
 
         clients.splice(ind, 1)
-     
     });
 })
