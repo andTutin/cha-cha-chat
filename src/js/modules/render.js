@@ -1,8 +1,8 @@
 export default {
     message:   data => {
-        return `<div class="message">
+        return `<div class="message message${data.userID}">
                     <div class="message__photo">
-                        <img class=${data.id} src=${data.avatar} alt=${data.fio}>
+                        <img class=${data.userID} src=${data.avatar} alt=${data.fio}>
                     </div>
                     <div class="message__body">
                         <div class="message__text"> ${data.message}</div>
@@ -14,10 +14,10 @@ export default {
                 </div>`
     },
     client:  client => {
-        return `<li class="users__item" id=${client.id}>
+        return `<li class="users__item" id=${client.userID}>
                     <div class="user-card">
                         <div class="user-card__avatar">
-                            <img class=${client.id} src=${client.avatar}>
+                            <img class=${client.userID} src=${client.avatar}>
                         </div>
                         <div class="user-card__info">
                             <div class="user-card__username">${client.fio}</div>
