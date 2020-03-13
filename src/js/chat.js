@@ -6,7 +6,7 @@ import overlay from './modules/overlay';
 import queries from './modules/queries';
 
 const io = require('socket.io-client');
-let socket = io();
+let socket = io.connect('http://localhost:3000');
 let userID;
 let userClass;
 let socketID;
