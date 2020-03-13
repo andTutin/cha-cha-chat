@@ -118,7 +118,7 @@ socket.on('login', data => {
 })
 
 socket.on('user-joined', data => {
-    queries.messagesWindow.innerHTML += `<div style="width: 100%; text-align: center; margin-bottom: 20px;"> ${data} </div>`;
+    queries.messagesWindow.innerHTML += `<div style="width: 100%; text-align: center; margin-bottom: 20px;"> ${data.fio} присоединился к чату </div>`;
 
     queries.messagesWindow.scrollTop = 1000000000
 })

@@ -18,6 +18,10 @@ function Store(settings) {
     this.mapState = function (stateName) {
         return stateName ? state[stateName] : state;
     }
+
+    this.getUser = function (id) {
+        return state.users.find(user => user.socketID == id);
+    }
 }
 
 const store = new Store({
@@ -28,6 +32,10 @@ const store = new Store({
     mutations: {
         ADD_USER: (state, user) => {
             state.users = [...state.users, user];
+        },
+        DELETE_USER:(state, id) => {
+            let userIndex = state.users.findIndex(user => user.socketID == id);
+            state.users = [...state.users.splice(userIndex, 1)];
         },
         ADD_MESSAGE: (state, message) => {
             state.history = [...state.history, message]
@@ -42,8 +50,11 @@ const store = new Store({
         }
     },
     actions: {
-        addUser({ commit }, user) {
+        addUser({commit}, user) {
             commit('ADD_USER', user);
+        },
+        deleteUser({commit}, id) {
+            commit('DELETE_USER', id);
         },
         addMessage({commit}, message){
             commit('ADD_MESSAGE', message)
@@ -55,18 +66,3 @@ const store = new Store({
 });
 
 module.exports = store;
-
-/*
-var actions = store.mapActions();
-actions.setNews({
-    TEXT: 'heLLO'
-})
-actions.setNews({
-    TEXT: 'heLLO2'
-})
-actions.updateNews({
-    id: 1,
-    TEXT: 'heLLO3'
-})
-console.log(store.mapState('news'))
-*/
